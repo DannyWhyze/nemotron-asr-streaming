@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 class ModelPoolExhaustedError(RuntimeError):
     """Raised when all resident models in the pool are currently leased."""
+
     pass
 
 
@@ -45,11 +46,10 @@ class ModelPoolEngine:
         backend_choice = self.config.backend
         try:
             import torch
+
             if torch.cuda.is_available():
                 self.device_name = torch.cuda.get_device_name(0)
-                self.total_vram_mb = round(
-                    torch.cuda.get_device_properties(0).total_memory / (1024 * 1024), 1
-                )
+                self.total_vram_mb = round(torch.cuda.get_device_properties(0).total_memory / (1024 * 1024), 1)
                 if backend_choice == "auto":
                     backend_choice = "cuda"
         except Exception as exc:
@@ -111,9 +111,7 @@ class ModelPoolEngine:
         try:
             model = await asyncio.wait_for(pool.get(), timeout=timeout)
         except (asyncio.TimeoutError, TimeoutError):
-            raise ModelPoolExhaustedError(
-                f"Model pool exhausted ({self.pool_size} models busy). Please retry."
-            )
+            raise ModelPoolExhaustedError(f"Model pool exhausted ({self.pool_size} models busy). Please retry.")
 
         try:
             yield model
@@ -129,9 +127,7 @@ class ModelPoolEngine:
         try:
             return await asyncio.wait_for(pool.get(), timeout=timeout)
         except (asyncio.TimeoutError, TimeoutError):
-            raise ModelPoolExhaustedError(
-                f"Model pool exhausted ({self.pool_size} models busy). Please retry."
-            )
+            raise ModelPoolExhaustedError(f"Model pool exhausted ({self.pool_size} models busy). Please retry.")
 
     async def return_model(self, model) -> None:
         """Return a borrowed model back into the pool."""
@@ -189,10 +185,7 @@ class ModelPoolEngine:
         session = selected_model.session()
         try:
             res = session.run(audio_np, timestamps="word", language=lang)
-            words = [
-                {"word": w.text, "start": w.t0_ms / 1000.0, "end": w.t1_ms / 1000.0}
-                for w in (res.words or [])
-            ]
+            words = [{"word": w.text, "start": w.t0_ms / 1000.0, "end": w.t1_ms / 1000.0} for w in (res.words or [])]
             segments = [
                 {"id": i, "start": seg.t0_ms / 1000.0, "end": seg.t1_ms / 1000.0, "text": seg.text}
                 for i, seg in enumerate(res.segments or [])

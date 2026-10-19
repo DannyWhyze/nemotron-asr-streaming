@@ -48,10 +48,12 @@ def setup_transcribe_environment() -> Path:
         nvcc_path = shutil.which("nvcc")
         if nvcc_path:
             cuda_dirs.append(Path(nvcc_path).parent)
-        cuda_dirs.extend([
-            Path(r"D:\Programs\cuda128\bin"),
-            Path(r"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8\bin"),
-        ])
+        cuda_dirs.extend(
+            [
+                Path(r"D:\Programs\cuda128\bin"),
+                Path(r"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.8\bin"),
+            ]
+        )
         for cdir in cuda_dirs:
             if cdir.is_dir():
                 try:

@@ -96,7 +96,7 @@ def test_ws_streaming_multi_client_concurrency(streaming_env):
                 hold_barrier.wait()
 
                 # Feed 1 chunk
-                chunk = (b"\x00" * 2048)
+                chunk = b"\x00" * 2048
                 ws.send_bytes(chunk)
                 part = json.loads(ws.receive_text())
                 assert part["event"] == "partial"

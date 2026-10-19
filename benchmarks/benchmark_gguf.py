@@ -20,12 +20,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-REPO_ROOT = (
-    Path(__file__).resolve().parent.parent
-    if Path(__file__).resolve().parent.name == "benchmarks"
-    else Path(__file__).resolve().parent
-)
-DEFAULT_MODELS_DIR = os.getenv("MODELS_DIR", "F:/KI_Model/Huggingface")
+REPO_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_MODELS_DIR = os.getenv("MODELS_DIR", str(REPO_ROOT / "models"))
 OUTPUT_DIR = REPO_ROOT / "data" / "output" / "benchmarks"
 AUDIO_FILES = [
     REPO_ROOT / "data" / "input" / "audio" / "bcn_weather.mp3",

@@ -40,9 +40,7 @@ def create_streaming_ws_router(engine: ModelPoolEngine) -> APIRouter:
                 finally:
                     engine.active_sessions = max(0, engine.active_sessions - 1)
         except ModelPoolExhaustedError:
-            logger.warning(
-                f"Stream rejected: model pool exhausted (4029 Busy) for session_id={session_id}"
-            )
+            logger.warning(f"Stream rejected: model pool exhausted (4029 Busy) for session_id={session_id}")
             try:
                 await websocket.send_text(StreamBusyEvent().model_dump_json())
                 await websocket.close(code=4029, reason="Model pool exhausted")
@@ -85,9 +83,7 @@ async def _handle_streaming_session(
 
         await websocket.send_text(StreamReadyEvent(session_id=session_id).model_dump_json())
 
-        audio_queue: asyncio.Queue[np.ndarray | None] = asyncio.Queue(
-            maxsize=engine.config.max_queue_size
-        )
+        audio_queue: asyncio.Queue[np.ndarray | None] = asyncio.Queue(maxsize=engine.config.max_queue_size)
         total_samples = 0
         start_t = time.perf_counter()
 
@@ -108,9 +104,7 @@ async def _handle_streaming_session(
                     if audio_queue.full():
                         try:
                             _ = audio_queue.get_nowait()
-                            logger.warning(
-                                f"Queue full in session {session_id}; dropped oldest chunk."
-                            )
+                            logger.warning(f"Queue full in session {session_id}; dropped oldest chunk.")
                         except asyncio.QueueEmpty:
                             pass
                     await audio_queue.put(arr)

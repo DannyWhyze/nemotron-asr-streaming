@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_MODELS_DIR = os.getenv("MODELS_DIR", "F:/KI_Model/Huggingface")
+DEFAULT_MODELS_DIR = os.getenv("MODELS_DIR", str(REPO_ROOT / "models"))
 
 
 def parse_args():

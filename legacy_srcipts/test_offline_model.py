@@ -1,5 +1,4 @@
-"""Direct offline transcription test using AutoModelForRNNT and AutoProcessor."""
-
+import os
 import sys
 import time
 from pathlib import Path
@@ -8,7 +7,12 @@ import torch
 from transformers import AutoModelForRNNT, AutoProcessor
 from transformers.audio_utils import load_audio
 
-MODEL_PATH = "F:/KI_Model/Huggingface/nvidia--nemotron-3.5-asr-streaming-0.6b"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+_candidates = [
+    Path(os.getenv("MODELS_DIR", "models")) / "nvidia--nemotron-3.5-asr-streaming-0.6b",
+    REPO_ROOT / "models" / "nvidia--nemotron-3.5-asr-streaming-0.6b",
+]
+MODEL_PATH = next((str(c) for c in _candidates if Path(c).is_dir()), "nvidia/nemotron-3.5-asr-streaming-0.6b")
 
 
 def resolve_audio(default_name: str) -> str:

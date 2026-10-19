@@ -28,15 +28,11 @@ def sanitize_pcm_chunk(
         return None
 
     if len(chunk_bytes) > max_size_bytes:
-        logger.warning(
-            f"Rejected PCM chunk: size {len(chunk_bytes)} bytes exceeds limit of {max_size_bytes} bytes."
-        )
+        logger.warning(f"Rejected PCM chunk: size {len(chunk_bytes)} bytes exceeds limit of {max_size_bytes} bytes.")
         return None
 
     if len(chunk_bytes) % 4 != 0:
-        logger.warning(
-            f"Rejected PCM chunk: size {len(chunk_bytes)} bytes is not 4-byte aligned (float32 required)."
-        )
+        logger.warning(f"Rejected PCM chunk: size {len(chunk_bytes)} bytes is not 4-byte aligned (float32 required).")
         return None
 
     try:

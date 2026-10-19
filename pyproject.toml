@@ -1,8 +1,12 @@
 [project]
 name = "stt-nemotron-3-5-asr-streaming-0-6"
 version = "0.1.0"
-description = "Add your description here"
+description = "Streaming and batch ASR inference service for NVIDIA Nemotron-3.5 0.6B via transcribe.cpp and PyTorch"
 readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "DannyWhyze" }
+]
 requires-python = ">=3.12"
 dependencies = [
     "accelerate>=1.15.0",

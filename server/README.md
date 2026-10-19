@@ -26,7 +26,7 @@ server/
 
 ### Module Responsibilities
 
-* **`config.py` (`ServerConfig`)**: Loads settings from environment variables and `.env`. Dynamically locates the Q8_0 GGUF weights across candidate paths (`F:/KI_Model/Huggingface/...`), configures backend preference (`auto`, `cuda`, `cpu`), and sets concurrency / model pool limits (`MODEL_POOL_SIZE`, `MAX_QUEUE_SIZE`, `MAX_CHUNK_SIZE_BYTES`).
+* **`config.py` (`ServerConfig`)**: Loads settings from environment variables and `.env`. Dynamically locates the Q8_0 GGUF weights across candidate paths (`MODELS_DIR`, `models/`, or local cache), configures backend preference (`auto`, `cuda`, `cpu`), and sets concurrency / model pool limits (`MODEL_POOL_SIZE`, `MAX_QUEUE_SIZE`, `MAX_CHUNK_SIZE_BYTES`).
 * **`engine.py` (`ModelPoolEngine`)**: Hosts resident `transcribe_cpp.Model` instances in GPU VRAM (configurable via `MODEL_POOL_SIZE`, default 3 $\approx$ 2.15 GB VRAM). Implements an asynchronous queue leasing pattern (`acquire_model`), eliminating subprocess spawning overhead and providing thread-safe, non-blocking in-memory inference.
 * **`sanitizer.py` (`sanitize_pcm_chunk`)**: Hardened audio validation pipeline. Enforces 4-byte float32 memory alignment, maximum chunk size limits (DoS prevention), and filters non-finite values (`NaN`, `+Inf`, `-Inf`) to prevent state-poisoning in Conformer recurrent attention caches.
 * **`schemas.py`**: Defines strict Pydantic models for REST endpoints (`TranscriptionResponse`, `VerboseTranscriptionResponse`), diagnostics (`HealthResponse`), and WebSocket streaming events (`StreamInitAction`, `StreamReadyEvent`, `StreamPartialEvent`, `StreamFinalEvent`, `StreamBusyEvent`).

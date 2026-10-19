@@ -6,6 +6,7 @@ Exports results to data/output/benchmarks/.
 """
 
 import json
+import os
 import time
 from datetime import UTC, datetime
 from pathlib import Path
@@ -21,12 +22,21 @@ from transformers import (
 )
 from transformers.audio_utils import load_audio
 
-REPO_ROOT = (
-    Path(__file__).resolve().parent.parent
-    if Path(__file__).resolve().parent.name == "benchmarks"
-    else Path(__file__).resolve().parent
-)
-MODEL_PATH = "F:/KI_Model/Huggingface/nvidia--nemotron-3.5-asr-streaming-0.6b"
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+
+def resolve_model_path() -> str:
+    candidates = [
+        Path(os.getenv("MODELS_DIR", "models")) / "nvidia--nemotron-3.5-asr-streaming-0.6b",
+        REPO_ROOT / "models" / "nvidia--nemotron-3.5-asr-streaming-0.6b",
+    ]
+    for c in candidates:
+        if c.is_dir():
+            return str(c.resolve())
+    return "nvidia/nemotron-3.5-asr-streaming-0.6b"
+
+
+MODEL_PATH = resolve_model_path()
 OUTPUT_DIR = REPO_ROOT / "data" / "output" / "benchmarks"
 AUDIO_FILES = [
     REPO_ROOT / "data" / "input" / "audio" / "bcn_weather.mp3",

@@ -149,9 +149,7 @@ ffmpeg -i input_source.ext -ar 16000 -ac 1 -c:a pcm_s16le output_16k_mono.wav
 ```python
 import nemo.collections.asr as nemo_asr
 
-asr_model = nemo_asr.models.ASRModel.from_pretrained(
-    model_name="nvidia/nemotron-3.5-asr-streaming-0.6b"
-)
+asr_model = nemo_asr.models.ASRModel.from_pretrained(model_name="nvidia/nemotron-3.5-asr-streaming-0.6b")
 
 transcriptions = asr_model.transcribe(
     paths2audio_files=["input_16k_mono.wav"],
